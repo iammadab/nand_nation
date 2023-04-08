@@ -2,7 +2,7 @@ use crate::bit::Bit;
 use crate::bit::Bit::{One, Zero};
 
 // Primitive gate, as such we implement the truth table directly
-fn nand(a: Bit, b: Bit) -> Bit {
+pub(crate) fn nand(a: Bit, b: Bit) -> Bit {
     match (a, b) {
         (Zero, Zero) => One,
         (Zero, One) => One,
