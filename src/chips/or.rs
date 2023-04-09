@@ -40,7 +40,7 @@ pub(crate) fn or8way(input: Bit8) -> Bit {
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
-    use crate::{bitstring, or16test};
+    use crate::{bit16string, bit8string, or16test};
 
     #[test]
     fn or_gate() {
@@ -58,5 +58,14 @@ mod test {
         or16test!("1010101010101010", "1010101010101010", "1010101010101010");
         or16test!("0011110011000011", "0000111111110000", "0011111111110011");
         or16test!("0001001000110100", "1001100001110110", "1001101001110110");
+    }
+
+    #[test]
+    fn or8way_gate() {
+        assert_eq!(or8way(bit8string!("00000000")), Zero);
+        assert_eq!(or8way(bit8string!("11111111")), One);
+        assert_eq!(or8way(bit8string!("00010000")), One);
+        assert_eq!(or8way(bit8string!("00000001")), One);
+        assert_eq!(or8way(bit8string!("00100110")), One);
     }
 }

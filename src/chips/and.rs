@@ -21,7 +21,7 @@ mod test {
     use crate::bit::Bit::{One, Zero};
     use crate::bit::{Bit, Bit16};
     use crate::chips::and::{and, and16};
-    use crate::{and16test, bitstring};
+    use crate::{and16test, bit16string};
 
     #[test]
     fn and_gate() {
