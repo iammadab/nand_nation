@@ -27,6 +27,15 @@ mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
 
+    macro_rules! or16test {
+        ($a:expr, $b:expr, $out:expr) => {
+            assert_eq!(
+                or16(Bit16::from(String::from($a)), Bit16::from(String::from($b))),
+                Bit16::from(String::from($out))
+            )
+        };
+    }
+
     #[test]
     fn or_gate() {
         assert_eq!(or(Zero, Zero), Zero);
@@ -37,47 +46,11 @@ mod test {
 
     #[test]
     fn or16_gate() {
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("0000000000000000"))
-            ),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("1111111111111111"))
-            ),
-            Bit16::from(String::from("1111111111111111"))
-        );
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("1111111111111111")),
-                Bit16::from(String::from("1111111111111111"))
-            ),
-            Bit16::from(String::from("1111111111111111"))
-        );
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("1010101010101010")),
-                Bit16::from(String::from("0101010101010101"))
-            ),
-            Bit16::from(String::from("1111111111111111"))
-        );
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("0011110011000011")),
-                Bit16::from(String::from("0000111111110000"))
-            ),
-            Bit16::from(String::from("0011111111110011"))
-        );
-        assert_eq!(
-            or16(
-                Bit16::from(String::from("0001001000110100")),
-                Bit16::from(String::from("1001100001110110"))
-            ),
-            Bit16::from(String::from("1001101001110110"))
-        );
+        or16test!("0000000000000000", "0000000000000000", "0000000000000000");
+        or16test!("0000000000000000", "1111111111111111", "1111111111111111");
+        or16test!("1111111111111111", "1111111111111111", "1111111111111111");
+        or16test!("1010101010101010", "1010101010101010", "1010101010101010");
+        or16test!("0011110011000011", "0000111111110000", "0011111111110011");
+        or16test!("0001001000110100", "1001100001110110", "1001101001110110");
     }
 }
