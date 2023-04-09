@@ -20,6 +20,15 @@ mod test {
     use crate::bit::Bit16;
     use crate::chips::not::{not, not16};
 
+    macro_rules! not16test {
+        ($a:expr, $out:expr) => {
+            assert_eq!(
+                not16(Bit16::from(String::from($a))),
+                Bit16::from(String::from($out))
+            );
+        };
+    }
+
     #[test]
     fn not_gate() {
         assert_eq!(not(One), Zero);
@@ -28,25 +37,10 @@ mod test {
 
     #[test]
     fn not16_gate() {
-        assert_eq!(
-            not16(Bit16::from(String::from("0000000000000000"))),
-            Bit16::from(String::from("1111111111111111"))
-        );
-        assert_eq!(
-            not16(Bit16::from(String::from("1111111111111111"))),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            not16(Bit16::from(String::from("1010101010101010"))),
-            Bit16::from(String::from("0101010101010101"))
-        );
-        assert_eq!(
-            not16(Bit16::from(String::from("0011110011000011"))),
-            Bit16::from(String::from("1100001100111100"))
-        );
-        assert_eq!(
-            not16(Bit16::from(String::from("0001001000110100"))),
-            Bit16::from(String::from("1110110111001011"))
-        );
+        not16test!("0000000000000000", "1111111111111111");
+        not16test!("1111111111111111", "0000000000000000");
+        not16test!("1010101010101010", "0101010101010101");
+        not16test!("0011110011000011", "1100001100111100");
+        not16test!("0001001000110100", "1110110111001011");
     }
 }
