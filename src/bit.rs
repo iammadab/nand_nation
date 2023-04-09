@@ -7,7 +7,7 @@ pub(crate) enum Bit {
 }
 
 #[derive(Debug, PartialEq)]
-struct Bit16([Bit; 16]);
+pub(crate) struct Bit16(pub(crate) [Bit; 16]);
 
 impl Default for Bit16 {
     fn default() -> Self {
