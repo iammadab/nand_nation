@@ -1,4 +1,4 @@
-use crate::bit::{Bit, Bit16};
+use crate::bit::{Bit, Bit16, Bit8};
 use crate::chips::and::and;
 use crate::chips::not::not;
 
@@ -22,19 +22,26 @@ pub(crate) fn or16(a: Bit16, b: Bit16) -> Bit16 {
     result
 }
 
+/// Or8Way
+/// Input: Bit8
+/// Output: Bit
+/// Function: out = or(Bit8[0], Bit8[1], ... Bit8[7])
+///     apply the or function to all the input bits simultaneously such that if
+///     any bit is a 1 then the output is a 1
+pub(crate) fn or8way(input: Bit8) -> Bit {
+    let mut result = input[0];
+    for i in 1..8 {
+        result = or(result, input[i])
+    }
+    result
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
+    use crate::or16test;
 
-    macro_rules! or16test {
-        ($a:expr, $b:expr, $out:expr) => {
-            assert_eq!(
-                or16(Bit16::from(String::from($a)), Bit16::from(String::from($b))),
-                Bit16::from(String::from($out))
-            )
-        };
-    }
 
     #[test]
     fn or_gate() {

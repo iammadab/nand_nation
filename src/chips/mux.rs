@@ -23,19 +23,7 @@ pub(crate) fn mux16(a: Bit16, b: Bit16, sel: Bit) -> Bit16 {
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
-
-    macro_rules! mux16test {
-        ($a:expr, $b:expr, $sel:expr, $out:expr) => {
-            assert_eq!(
-                mux16(
-                    Bit16::from(String::from($a)),
-                    Bit16::from(String::from($b)),
-                    $sel
-                ),
-                Bit16::from(String::from($out))
-            )
-        };
-    }
+    use crate::mux16test;
 
     #[test]
     fn mux_gate() {

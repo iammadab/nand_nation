@@ -1,4 +1,4 @@
-use std::ops::{Deref, Index, IndexMut};
+use std::ops::{Deref, DerefMut, Index, IndexMut};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) enum Bit {
@@ -7,7 +7,7 @@ pub(crate) enum Bit {
 }
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct BitN<const N: usize>([Bit; N]);
+pub(crate) struct BitN<const N: usize>(pub(crate) [Bit; N]);
 
 impl<const N: usize> Default for BitN<N> {
     fn default() -> Self {
@@ -15,16 +15,17 @@ impl<const N: usize> Default for BitN<N> {
     }
 }
 
-impl<const N: usize> Index<usize> for BitN<N> {
-    type Output = Bit;
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
+impl<const N: usize> Deref for BitN<N> {
+    type Target = [Bit; N];
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 
-impl<const N: usize> IndexMut<usize> for BitN<N> {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.0[index]
+impl<const N: usize> DerefMut for BitN<N> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
     }
 }
 

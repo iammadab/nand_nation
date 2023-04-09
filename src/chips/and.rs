@@ -18,18 +18,11 @@ pub(crate) fn and16(a: Bit16, b: Bit16) -> Bit16 {
 
 #[cfg(test)]
 mod test {
+    use crate::and16test;
     use crate::bit::Bit::{One, Zero};
     use crate::bit::{Bit, Bit16};
     use crate::chips::and::{and, and16};
 
-    macro_rules! and16test {
-        ($a:expr, $b:expr, $out:expr) => {
-            assert_eq!(
-                and16(Bit16::from(String::from($a)), Bit16::from(String::from($b))),
-                Bit16::from(String::from($out))
-            )
-        };
-    }
 
     #[test]
     fn and_gate() {

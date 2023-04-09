@@ -19,15 +19,8 @@ mod test {
     use crate::bit::Bit::{One, Zero};
     use crate::bit::Bit16;
     use crate::chips::not::{not, not16};
+    use crate::not16test;
 
-    macro_rules! not16test {
-        ($a:expr, $out:expr) => {
-            assert_eq!(
-                not16(Bit16::from(String::from($a))),
-                Bit16::from(String::from($out))
-            );
-        };
-    }
 
     #[test]
     fn not_gate() {
