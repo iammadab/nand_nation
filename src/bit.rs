@@ -49,11 +49,12 @@ impl<const N: usize> From<[Bit; N]> for BitN<N> {
 }
 
 pub(crate) type Bit16 = BitN<16>;
+pub(crate) type Bit8 = BitN<8>;
 
 #[cfg(test)]
 mod test {
     use crate::bit::Bit::{One, Zero};
-    use crate::bit::{Bit, Bit16};
+    use crate::bit::{Bit, Bit16, Bit8};
 
     #[test]
     fn bit16_from_string() {
@@ -68,6 +69,25 @@ mod test {
                 One, Zero, One, Zero, One, Zero, One, Zero, One, Zero, One, Zero, One, Zero, One,
                 Zero
             ])
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn cannot_build_bit16_from_invalid_len_string() {
+        let bits = Bit16::from(String::from("0"));
+    }
+
+    #[test]
+    fn bit8_from_string() {
+        let bits = Bit8::from(String::from("00000000"));
+        assert_eq!(bits, Bit8::from([Zero; 8]));
+        let bits = Bit8::from(String::from("11111111"));
+        assert_eq!(bits, Bit8::from([One; 8]));
+        let bits = Bit8::from(String::from("10101010"));
+        assert_eq!(
+            bits,
+            Bit8::from([One, Zero, One, Zero, One, Zero, One, Zero,])
         );
     }
 }
