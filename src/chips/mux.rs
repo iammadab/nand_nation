@@ -24,6 +24,19 @@ mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
 
+    macro_rules! mux16test {
+        ($a:expr, $b:expr, $sel:expr, $out:expr) => {
+            assert_eq!(
+                mux16(
+                    Bit16::from(String::from($a)),
+                    Bit16::from(String::from($b)),
+                    $sel
+                ),
+                Bit16::from(String::from($out))
+            )
+        };
+    }
+
     #[test]
     fn mux_gate() {
         assert_eq!(mux(Zero, Zero, Zero), Zero);
@@ -38,69 +51,13 @@ mod test {
 
     #[test]
     fn mux16_gate() {
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("0000000000000000")),
-                Zero
-            ),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("0000000000000000")),
-                One
-            ),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("0001001000110100")),
-                Zero
-            ),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("0000000000000000")),
-                Bit16::from(String::from("0001001000110100")),
-                One
-            ),
-            Bit16::from(String::from("0001001000110100"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("1001100001110110")),
-                Bit16::from(String::from("0000000000000000")),
-                Zero
-            ),
-            Bit16::from(String::from("1001100001110110"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("1001100001110110")),
-                Bit16::from(String::from("0000000000000000")),
-                One
-            ),
-            Bit16::from(String::from("0000000000000000"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("1010101010101010")),
-                Bit16::from(String::from("0101010101010101")),
-                Zero
-            ),
-            Bit16::from(String::from("1010101010101010"))
-        );
-        assert_eq!(
-            mux16(
-                Bit16::from(String::from("1010101010101010")),
-                Bit16::from(String::from("0101010101010101")),
-                One
-            ),
-            Bit16::from(String::from("0101010101010101"))
-        );
+        mux16test!("0000000000000000", "0000000000000000", Zero, "0000000000000000");
+        mux16test!("0000000000000000", "0000000000000000",One, "0000000000000000");
+        mux16test!("0000000000000000", "0001001000110100", Zero, "0000000000000000");
+        mux16test!("0000000000000000", "0001001000110100",One, "0001001000110100");
+        mux16test!("1001100001110110", "0000000000000000", Zero, "1001100001110110");
+        mux16test!("1001100001110110", "0000000000000000",One, "0000000000000000");
+        mux16test!("1010101010101010", "0101010101010101", Zero, "1010101010101010");
+        mux16test!("1010101010101010", "0101010101010101",One, "0101010101010101");
     }
 }
