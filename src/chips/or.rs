@@ -40,8 +40,7 @@ pub(crate) fn or8way(input: Bit8) -> Bit {
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
-    use crate::or16test;
-
+    use crate::{bitstring, or16test};
 
     #[test]
     fn or_gate() {

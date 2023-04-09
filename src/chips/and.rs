@@ -18,11 +18,10 @@ pub(crate) fn and16(a: Bit16, b: Bit16) -> Bit16 {
 
 #[cfg(test)]
 mod test {
-    use crate::and16test;
     use crate::bit::Bit::{One, Zero};
     use crate::bit::{Bit, Bit16};
     use crate::chips::and::{and, and16};
-
+    use crate::{and16test, bitstring};
 
     #[test]
     fn and_gate() {

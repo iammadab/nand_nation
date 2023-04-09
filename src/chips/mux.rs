@@ -23,7 +23,7 @@ pub(crate) fn mux16(a: Bit16, b: Bit16, sel: Bit) -> Bit16 {
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
-    use crate::mux16test;
+    use crate::{bitstring, mux16test};
 
     #[test]
     fn mux_gate() {

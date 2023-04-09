@@ -19,8 +19,7 @@ mod test {
     use crate::bit::Bit::{One, Zero};
     use crate::bit::Bit16;
     use crate::chips::not::{not, not16};
-    use crate::not16test;
-
+    use crate::{bitstring, not16test};
 
     #[test]
     fn not_gate() {
