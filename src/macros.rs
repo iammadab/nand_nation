@@ -27,6 +27,13 @@ macro_rules! bit3string {
 }
 
 #[macro_export]
+macro_rules! bit4string {
+    ($a:expr) => {
+        Bit4::from(String::from($a))
+    };
+}
+
+#[macro_export]
 macro_rules! mux16test {
     ($a:expr, $b:expr, $sel:expr, $out:expr) => {
         assert_eq!(
