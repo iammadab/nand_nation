@@ -52,6 +52,7 @@ impl<const N: usize> From<[Bit; N]> for BitN<N> {
 pub(crate) type Bit16 = BitN<16>;
 pub(crate) type Bit8 = BitN<8>;
 pub(crate) type Bit2 = BitN<2>;
+pub(crate) type Bit3 = BitN<3>;
 
 #[cfg(test)]
 mod test {
