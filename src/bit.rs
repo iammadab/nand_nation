@@ -6,7 +6,7 @@ pub(crate) enum Bit {
     Zero,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub(crate) struct BitN<const N: usize>(pub(crate) [Bit; N]);
 
 impl<const N: usize> Default for BitN<N> {
@@ -51,6 +51,7 @@ impl<const N: usize> From<[Bit; N]> for BitN<N> {
 
 pub(crate) type Bit16 = BitN<16>;
 pub(crate) type Bit8 = BitN<8>;
+pub(crate) type Bit2 = BitN<2>;
 
 #[cfg(test)]
 mod test {

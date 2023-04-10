@@ -13,6 +13,13 @@ macro_rules! bit8string {
 }
 
 #[macro_export]
+macro_rules! bit2string {
+    ($a:expr) => {
+        Bit2::from(String::from($a))
+    };
+}
+
+#[macro_export]
 macro_rules! mux16test {
     ($a:expr, $b:expr, $sel:expr, $out:expr) => {
         assert_eq!(
@@ -43,5 +50,23 @@ macro_rules! or16test {
 macro_rules! not16test {
     ($a:expr, $out:expr) => {
         assert_eq!(not16(bit16string!($a)), bit16string!($out));
+    };
+}
+
+#[macro_export]
+macro_rules! mux4way16test {
+    ($a:expr, $b:expr, $c:expr, $d:expr, $sel:expr, $out:expr) => {
+        assert_eq!(
+            mux4way16(
+                [
+                    bit16string!($a),
+                    bit16string!($b),
+                    bit16string!($c),
+                    bit16string!($d),
+                ],
+                bit2string!($sel),
+            ),
+            bit16string!($out)
+        );
     };
 }
