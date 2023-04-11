@@ -106,3 +106,13 @@ macro_rules! mux8way16test {
         );
     };
 }
+
+#[macro_export]
+macro_rules! add16test {
+    ($a:expr, $b:expr, $out:expr) => {
+        assert_eq!(
+            add16(bit16string!($a), bit16string!($b)),
+            bit16string!($out)
+        );
+    };
+}
