@@ -1,3 +1,4 @@
+mod alu;
 mod and;
 mod dmux;
 mod mux;
