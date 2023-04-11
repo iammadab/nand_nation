@@ -8,7 +8,7 @@ use crate::chips::xor::xor;
 pub(crate) fn half_adder(a: Bit, b: Bit) -> (Bit, Bit) {
     let sum = xor(a, b);
     let carry = and(a, b);
-    return (sum, carry);
+    (sum, carry)
 }
 
 #[cfg(test)]
