@@ -3,7 +3,7 @@ use crate::bit::{Bit, Bit16};
 use crate::chips::nand::nand;
 
 pub(crate) fn not(a: Bit) -> Bit {
-    nand(a, One)
+    nand(a, a)
 }
 
 pub(crate) fn not16(input: Bit16) -> Bit16 {
