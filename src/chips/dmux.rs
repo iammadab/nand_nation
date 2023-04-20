@@ -1,5 +1,5 @@
 use crate::bit::{Bit, Bit16, Bit2, Bit3, Bit4, Bit8};
-use crate::chips::and::{and, and16};
+use crate::chips::and::{and, and16, and_bit16_with_bit};
 use crate::chips::not::not;
 
 /// Demultiplexor
@@ -15,11 +15,15 @@ pub(crate) fn dmux(input: Bit, sel: Bit) -> (Bit, Bit) {
     (a, b)
 }
 
-// pub(crate) fn dmux16(input: Bit16, sel: Bit) -> (Bit16, Bit16) {
-//     // how do you build a dmux 16 gate
-//     // we want to route the input to some output given a selector bit
-//     //
-// }
+/// Demultiplexor
+/// Inputs: input[16], sel
+/// Outputs: a[16], b[16]
+/// Function: if sel = 0 then { a = input, b = 0 } else { a = 0, b = input }
+pub(crate) fn dmux16(input: Bit16, sel: Bit) -> (Bit16, Bit16) {
+    let a = and_bit16_with_bit(input, not(sel));
+    let b = and_bit16_with_bit(input, sel);
+    (a, b)
+}
 
 pub(crate) fn dmux4way(input: Bit, sel: Bit2) -> Bit4 {
     // Take a single bit and expand it into 4 output channels
@@ -41,7 +45,7 @@ pub(crate) fn dmux8way(input: Bit, sel: Bit3) -> Bit8 {
 mod test {
     use super::*;
     use crate::bit::Bit::{One, Zero};
-    use crate::{bit2string, bit3string, bit4string, bit8string};
+    use crate::{bit16string, bit2string, bit3string, bit4string, bit8string};
 
     #[test]
     fn dmux_gate() {
@@ -49,6 +53,22 @@ mod test {
         assert_eq!(dmux(Zero, One), (Zero, Zero));
         assert_eq!(dmux(One, Zero), (One, Zero));
         assert_eq!(dmux(One, One), (Zero, One));
+    }
+
+    #[test]
+    fn dmux16_gate() {
+        assert_eq!(
+            dmux16(bit16string!("0000000000000000"), Bit::Zero),
+            (Bit16::default(), Bit16::default())
+        );
+        assert_eq!(
+            dmux16(bit16string!("1111111111111111"), Bit::Zero),
+            (bit16string!("1111111111111111"), Bit16::default())
+        );
+        assert_eq!(
+            dmux16(bit16string!("1111111111111111"), Bit::One),
+            (Bit16::default(), bit16string!("1111111111111111"))
+        );
     }
 
     #[test]
