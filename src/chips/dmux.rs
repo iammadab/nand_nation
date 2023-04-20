@@ -1,5 +1,5 @@
-use crate::bit::{Bit, Bit2, Bit3, Bit4, Bit8};
-use crate::chips::and::and;
+use crate::bit::{Bit, Bit16, Bit2, Bit3, Bit4, Bit8};
+use crate::chips::and::{and, and16};
 use crate::chips::not::not;
 
 /// Demultiplexor
@@ -14,6 +14,12 @@ pub(crate) fn dmux(input: Bit, sel: Bit) -> (Bit, Bit) {
     let b = and(input, sel);
     (a, b)
 }
+
+// pub(crate) fn dmux16(input: Bit16, sel: Bit) -> (Bit16, Bit16) {
+//     // how do you build a dmux 16 gate
+//     // we want to route the input to some output given a selector bit
+//     //
+// }
 
 pub(crate) fn dmux4way(input: Bit, sel: Bit2) -> Bit4 {
     // Take a single bit and expand it into 4 output channels
