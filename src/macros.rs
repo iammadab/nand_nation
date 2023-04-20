@@ -34,6 +34,13 @@ macro_rules! bit4string {
 }
 
 #[macro_export]
+macro_rules! bitstring {
+    ($a:expr) => {
+        Bit::from(String::from($a))
+    };
+}
+
+#[macro_export]
 macro_rules! mux16test {
     ($a:expr, $b:expr, $sel:expr, $out:expr) => {
         assert_eq!(
@@ -114,5 +121,24 @@ macro_rules! add16test {
             add16(bit16string!($a), bit16string!($b)),
             bit16string!($out)
         );
+    };
+}
+
+#[macro_export]
+macro_rules! alu_test {
+    ($a:expr, $b:expr, $zx:expr, $nx:expr, $zy:expr, $ny:expr, $f:expr, $no:expr, $o:expr, $zr:expr, $ng:expr) => {
+        assert_eq!(
+            alu(
+                bit16string!($a),
+                bit16string!($b),
+                bitstring!($zx),
+                bitstring!($nx),
+                bitstring!($zy),
+                bitstring!($ny),
+                bitstring!($f),
+                bitstring!($no),
+            ),
+            (bit16string!($o), bitstring!($zr), bitstring!($ng))
+        )
     };
 }

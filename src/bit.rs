@@ -6,6 +6,19 @@ pub(crate) enum Bit {
     Zero,
 }
 
+impl From<String> for Bit {
+    fn from(value: String) -> Self {
+        value
+            .chars()
+            .next()
+            .map(|ch| match ch {
+                '1' => Bit::One,
+                _ => Bit::Zero,
+            })
+            .unwrap_or(Bit::Zero)
+    }
+}
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub(crate) struct BitN<const N: usize>(pub(crate) [Bit; N]);
 
