@@ -22,6 +22,18 @@ impl From<String> for Bit {
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub(crate) struct BitN<const N: usize>(pub(crate) [Bit; N]);
 
+impl<const N: usize> BitN<N> {
+    pub(crate) fn truncate<const T: usize>(&self) -> [Bit; T] {
+        debug_assert!(T < N);
+        let mut output = [Bit::Zero; T];
+        // take the last T bits from self
+        for i in 0..T {
+            output[i] = self.0[N - T + i];
+        }
+        output
+    }
+}
+
 impl<const N: usize> Default for BitN<N> {
     fn default() -> Self {
         BitN([Bit::Zero; N])
@@ -71,7 +83,8 @@ pub(crate) type Bit4 = BitN<4>;
 #[cfg(test)]
 mod test {
     use crate::bit::Bit::{One, Zero};
-    use crate::bit::{Bit, Bit16, Bit8};
+    use crate::bit::{Bit, Bit16, Bit3, Bit4, Bit8};
+    use crate::{bit3string, bit4string};
 
     #[test]
     fn bit16_from_string() {
@@ -106,5 +119,14 @@ mod test {
             bits,
             Bit8::from([One, Zero, One, Zero, One, Zero, One, Zero,])
         );
+    }
+
+    #[test]
+    fn bit_truncation() {
+        let seven_16_bit = Bit16::from(String::from("0000000000000111"));
+        let seven_3_bit: Bit3 = seven_16_bit.truncate::<3>().into();
+        assert_eq!(seven_3_bit, bit3string!("111"));
+        let seven_4_bit: Bit4 = seven_16_bit.truncate::<4>().into();
+        assert_eq!(seven_4_bit, bit4string!("0111"));
     }
 }
