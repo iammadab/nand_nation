@@ -7,11 +7,11 @@ use crate::chips::mux::mux;
 /// Output: out
 /// Function: if load(t-1) then out(t) = in(t - 1)
 ///     else out(t) = out(t - 1)
-struct Register {
+struct BinaryCell {
     dff: DFF,
 }
 
-impl Register {
+impl BinaryCell {
     fn new() -> Self {
         Self { dff: DFF::new() }
     }
@@ -27,12 +27,12 @@ impl Register {
 #[cfg(test)]
 mod test {
     use crate::bit::Bit;
-    use crate::chips::memory::register::Register;
+    use crate::chips::memory::binary_cell::BinaryCell;
     use crate::testing::TestReader;
 
     #[test]
     fn register_gate() {
-        let mut register = Register::new();
+        let mut binary_cell = BinaryCell::new();
 
         let test_tokens = TestReader::read("register.txt");
         let mut token_iter = test_tokens.into_iter();
@@ -45,7 +45,7 @@ mod test {
             let load = Bit::from(token_iter.next().unwrap());
             let out = Bit::from(token_iter.next().unwrap());
 
-            assert_eq!(register.clock(input, load), out);
+            assert_eq!(binary_cell.clock(input, load), out);
         }
     }
 }

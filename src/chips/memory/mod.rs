@@ -1,2 +1,2 @@
 mod dff;
-mod register;
+mod binary_cell;
