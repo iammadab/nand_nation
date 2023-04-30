@@ -1,7 +1,7 @@
-use crate::bit::{Bit, Bit12, Bit16, Bit3, Bit6, Bit9};
-use crate::chips::dmux::dmux8way;
+use crate::bit::{Bit, Bit12, Bit14, Bit16, Bit2, Bit3, Bit6, Bit9};
+use crate::chips::dmux::{dmux4way, dmux8way};
 use crate::chips::memory::register::Register;
-use crate::chips::mux::mux8way16;
+use crate::chips::mux::{mux4way16, mux8way16};
 
 /// RAM8
 /// Input: in[16], address[3], load
@@ -106,7 +106,7 @@ impl RAM512 {
     }
 }
 
-/// RAM512
+/// RAM4K
 /// Input: in[16], address[9], load
 /// Output: out[16]
 /// Function: same as above
@@ -148,10 +148,55 @@ impl RAM4K {
     }
 }
 
+/// RAM16K
+/// Input: in[16], address[9], load
+/// Output: out[16]
+/// Function: same as above
+#[derive(Copy, Clone)]
+struct RAM16K {
+    memory: [RAM4K; 4],
+}
+
+impl RAM16K {
+    fn new() -> Self {
+        Self {
+            memory: [RAM4K::new(); 4],
+        }
+    }
+
+    pub(crate) fn clock(&mut self, input: Bit16, address: Bit14, load: Bit) -> Bit16 {
+        let memory_address: Bit2 = [address[0], address[1]].into();
+        let ram_address: Bit12 = [
+            address[2],
+            address[3],
+            address[4],
+            address[5],
+            address[6],
+            address[7],
+            address[8],
+            address[9],
+            address[10],
+            address[11],
+            address[12],
+            address[13],
+        ]
+        .into();
+
+        let load_values = dmux4way(load, memory_address);
+
+        let mut memory_outputs = Vec::new();
+        for i in 0..4 {
+            memory_outputs.push(self.memory[i].clock(input, ram_address, load_values[i]));
+        }
+
+        mux4way16(memory_outputs.try_into().unwrap(), memory_address)
+    }
+}
+
 #[cfg(test)]
 mod test {
-    use crate::bit::{Bit, Bit12, Bit16, Bit3, Bit6, Bit9};
-    use crate::chips::memory::ram::{RAM4K, RAM512, RAM64, RAM8};
+    use crate::bit::{Bit, Bit12, Bit14, Bit16, Bit3, Bit6, Bit9};
+    use crate::chips::memory::ram::{RAM16K, RAM4K, RAM512, RAM64, RAM8};
     use crate::testing::TestReader;
 
     #[test]
@@ -251,6 +296,31 @@ mod test {
                 token_iter.next().unwrap(),
             ));
             assert_eq!(ram_4k.clock(input, address, load), output);
+        }
+    }
+
+    #[test]
+    fn ram16k_gate() {
+        let mut ram_16k = RAM16K::new();
+
+        let test_tokens = TestReader::read("ram16.txt");
+        let mut token_iter = test_tokens.into_iter();
+        // skip the header
+        let mut token_iter = token_iter.skip(5);
+
+        // continue as long as we have clock input
+        while token_iter.next().is_some() {
+            let input = Bit16::from(TestReader::from_16_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            let load = Bit::from(token_iter.next().unwrap());
+            let address = Bit14::from(TestReader::from_14_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            let output = Bit16::from(TestReader::from_16_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            assert_eq!(ram_16k.clock(input, address, load), output);
         }
     }
 }
