@@ -1,4 +1,4 @@
-mod alu;
+pub(crate) mod alu;
 mod and;
 mod dmux;
 mod memory;
