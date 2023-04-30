@@ -6,6 +6,7 @@ use crate::chips::memory::binary_cell::BinaryCell;
 /// Output: out[16],
 /// Function: if load(t-1) then out(t) = in(t-1)
 ///     else out(t) = out(t - 1)
+#[derive(Clone, Copy)]
 pub(crate) struct Register {
     binary_cells: [BinaryCell; 16],
 }

@@ -1,4 +1,4 @@
-use crate::bit::Bit16;
+use crate::bit::{Bit16, Bit3};
 use crate::chips::alu::inc::inc16;
 use crate::chips::not::not16;
 
