@@ -79,6 +79,7 @@ pub(crate) type Bit3 = BitN<3>;
 pub(crate) type Bit4 = BitN<4>;
 pub(crate) type Bit6 = BitN<6>;
 pub(crate) type Bit8 = BitN<8>;
+pub(crate) type Bit9 = BitN<9>;
 pub(crate) type Bit16 = BitN<16>;
 
 #[cfg(test)]
