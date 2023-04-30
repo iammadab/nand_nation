@@ -303,7 +303,7 @@ mod test {
     fn ram16k_gate() {
         let mut ram_16k = RAM16K::new();
 
-        let test_tokens = TestReader::read("ram16.txt");
+        let test_tokens = TestReader::read("ram16k.txt");
         let mut token_iter = test_tokens.into_iter();
         // skip the header
         let mut token_iter = token_iter.skip(5);
