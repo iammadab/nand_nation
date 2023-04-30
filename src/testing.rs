@@ -1,4 +1,4 @@
-use crate::bit::{Bit16, Bit3};
+use crate::bit::{Bit16, Bit3, Bit6};
 use crate::chips::alu::two_complement::two_complement16;
 use crate::{bit16string, bit3string};
 use std::env;
@@ -43,6 +43,11 @@ impl TestReader {
     pub(crate) fn from_3_bit_int_string(int_string: String) -> Bit3 {
         let as_bit_16 = Self::from_16_bit_int_string(int_string);
         as_bit_16.truncate::<3>().into()
+    }
+
+    pub(crate) fn from_6_bit_int_string(int_string: String) -> Bit6 {
+        let as_bit_16 = Self::from_16_bit_int_string(int_string);
+        as_bit_16.truncate::<6>().into()
     }
 }
 

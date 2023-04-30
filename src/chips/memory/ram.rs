@@ -1,4 +1,4 @@
-use crate::bit::{Bit, Bit16, Bit3};
+use crate::bit::{Bit, Bit16, Bit3, Bit6};
 use crate::chips::dmux::dmux8way;
 use crate::chips::memory::register::Register;
 use crate::chips::mux::mux8way16;
@@ -9,6 +9,7 @@ use crate::chips::mux::mux8way16;
 /// Function: out(t) = RAM[address(t)](t) - what does register at the provided address contain
 ///     if load is set, then store the input in the register at current address
 ///     at next clock cycle we shall have access to this stored value
+#[derive(Copy, Clone)]
 struct RAM8 {
     registers: [Register; 8],
 }
@@ -38,10 +39,42 @@ impl RAM8 {
     }
 }
 
+/// RAM64
+/// Input: in[16], address[6], load
+/// Output: out[16]
+/// Function: same as above
+struct RAM64 {
+    memory: [RAM8; 8],
+}
+
+impl RAM64 {
+    fn new() -> Self {
+        Self {
+            memory: [RAM8::new(); 8],
+        }
+    }
+
+    pub(crate) fn clock(&mut self, input: Bit16, address: Bit6, load: Bit) -> Bit16 {
+        // We use the first 3 bits of the address to select which RAM8 gets
+        // the load value
+        let ram_8_address: Bit3 = [address[0], address[1], address[2]].into();
+        let register_address: Bit3 = [address[3], address[4], address[5]].into();
+
+        let ram_8_load = dmux8way(load, ram_8_address);
+
+        let mut ram_8_outputs = Vec::new();
+        for i in 0..8 {
+            ram_8_outputs.push(self.memory[i].clock(input, register_address, ram_8_load[i]));
+        }
+
+        mux8way16(ram_8_outputs.try_into().unwrap(), ram_8_address)
+    }
+}
+
 #[cfg(test)]
 mod test {
-    use crate::bit::{Bit, Bit16, Bit3};
-    use crate::chips::memory::ram8::RAM8;
+    use crate::bit::{Bit, Bit16, Bit3, Bit6};
+    use crate::chips::memory::ram::{RAM64, RAM8};
     use crate::testing::TestReader;
 
     #[test]
@@ -66,6 +99,31 @@ mod test {
                 token_iter.next().unwrap(),
             ));
             assert_eq!(ram_8.clock(input, address, load), output);
+        }
+    }
+
+    #[test]
+    fn ram64_gate() {
+        let mut ram_64 = RAM64::new();
+
+        let test_tokens = TestReader::read("ram64.txt");
+        let mut token_iter = test_tokens.into_iter();
+        // skip the header
+        let mut token_iter = token_iter.skip(5);
+
+        // continue as long as we have clock input
+        while token_iter.next().is_some() {
+            let input = Bit16::from(TestReader::from_16_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            let load = Bit::from(token_iter.next().unwrap());
+            let address = Bit6::from(TestReader::from_6_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            let output = Bit16::from(TestReader::from_16_bit_int_string(
+                token_iter.next().unwrap(),
+            ));
+            assert_eq!(ram_64.clock(input, address, load), output);
         }
     }
 }
