@@ -9,6 +9,7 @@ use crate::bit::Bit;
 /// Output: out (single bit)
 /// Function: out(t) = in(t - 1)
 ///     at clock init out(t) = 0
+#[derive(Clone, Copy)]
 pub(crate) struct DFF {
     pub(crate) stored_bit: Bit,
 }

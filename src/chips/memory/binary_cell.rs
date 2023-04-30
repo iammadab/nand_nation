@@ -7,16 +7,17 @@ use crate::chips::mux::mux;
 /// Output: out
 /// Function: if load(t-1) then out(t) = in(t - 1)
 ///     else out(t) = out(t - 1)
-struct BinaryCell {
+#[derive(Clone, Copy)]
+pub(crate) struct BinaryCell {
     dff: DFF,
 }
 
 impl BinaryCell {
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self { dff: DFF::new() }
     }
 
-    fn clock(&mut self, input: Bit, load: Bit) -> Bit {
+    pub(crate) fn clock(&mut self, input: Bit, load: Bit) -> Bit {
         // if the load bit is set, we feed forward the provided input
         // if not set we feed forward the last output of the dff
         let dff_input = mux(self.dff.stored_bit, input, load);
@@ -34,7 +35,7 @@ mod test {
     fn register_gate() {
         let mut binary_cell = BinaryCell::new();
 
-        let test_tokens = TestReader::read("register.txt");
+        let test_tokens = TestReader::read("binary_cell.txt");
         let mut token_iter = test_tokens.into_iter();
         // skip the header
         let mut token_iter = token_iter.skip(4);
