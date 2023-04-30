@@ -3,6 +3,10 @@ use crate::chips::and::and;
 use crate::chips::not::not;
 use crate::chips::or::or;
 
+/// Mux
+/// Input: a, b, sel
+/// Output: out
+/// Function: if sel = 0 out = a else out = b
 pub(crate) fn mux(a: Bit, b: Bit, sel: Bit) -> Bit {
     // let c = sel
     // mux = ac' + bc

@@ -1,2 +1,2 @@
-mod clock;
 mod dff;
+mod register;

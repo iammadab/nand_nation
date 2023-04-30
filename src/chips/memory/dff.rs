@@ -9,18 +9,18 @@ use crate::bit::Bit;
 /// Output: out (single bit)
 /// Function: out(t) = in(t - 1)
 ///     at clock init out(t) = 0
-struct DFF {
-    stored_bit: Bit,
+pub(crate) struct DFF {
+    pub(crate) stored_bit: Bit,
 }
 
 impl DFF {
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {
             stored_bit: Bit::Zero,
         }
     }
 
-    fn clock(&mut self, input: Bit) -> Bit {
+    pub(crate) fn clock(&mut self, input: Bit) -> Bit {
         let mut stored_bit = self.stored_bit;
         self.stored_bit = input;
         stored_bit
